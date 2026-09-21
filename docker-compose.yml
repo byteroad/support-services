@@ -39,21 +39,21 @@ services:
     env_file:
       - .env     # path to your .env file
     volumes:   
-      - ./apache-httpd/httpd.conf:/usr/local/apache2/conf/httpd.conf
-      # - ./apache-httpd/httpd-ssl.conf:/usr/local/apache2/conf/httpd.conf
+      # - ./apache-httpd/httpd.conf:/usr/local/apache2/conf/httpd.conf
+      - ./apache-httpd/httpd-ssl.conf:/usr/local/apache2/conf/httpd.conf
       - ./apache-httpd/robots.txt:/usr/local/apache2/htdocs/robots.txt      
-      # - /etc/cert/2logs.pem:/usr/local/apache2/conf/matomo/fullchain.pem  
-      # - /etc/cert/logs_privkey4.pem:/usr/local/apache2/conf/matomo/privkey.pem
-      # - /etc/cert/1ghc.pem:/usr/local/apache2/conf/health/fullchain.pem  
-      # - /etc/cert/ghc_privkey1.pem:/usr/local/apache2/conf/health/privkey.pem
+      - /etc/cert/2logs.pem:/usr/local/apache2/conf/matomo/fullchain.pem  
+      - /etc/cert/logs_privkey4.pem:/usr/local/apache2/conf/matomo/privkey.pem
+      - /etc/cert/1ghc.pem:/usr/local/apache2/conf/health/fullchain.pem  
+      - /etc/cert/ghc_privkey1.pem:/usr/local/apache2/conf/health/privkey.pem
       - ./apache-httpd/logs:/usr/local/apache2/logs
     ports:
       - "80:80"
       - "443:443"
-    networks:
-      default:
-        aliases:
-          - ogcapi.dgterritorio.gov.pt
+    # networks:
+    #   default:
+    #     aliases:
+    #       - ogcapi.dgterritorio.gov.pt
     restart: always
     logging:
       driver: "json-file"
@@ -87,13 +87,13 @@ services:
       context: ./matomo/
       dockerfile: Dockerfile.main
     container_name: matomo
-    ports:
-      - 8081:80
+    # ports:
+    #   - 8081:80
     env_file:
       - .env     # path to your .env file
-    volumes:
-      - ./matomo/data/matomo:/var/www/html:z
-      - ./apache-httpd/logs:/apache
+    # volumes:
+    #   - ./matomo/data/matomo:/var/www/html:z
+    #   - ./apache-httpd/logs:/apache
     networks:
       - default
     restart: always
@@ -103,25 +103,25 @@ services:
         max-size: "10m"
         max-file: "3"
 
-  python_matomo:
-    build:
-      context: ./matomo/
-      dockerfile: Dockerfile.cron
-    container_name: matomo_python
-    env_file:
-      - .env     # path to your .env file
-    volumes:
-        - ./matomo/data/matomo:/var/www/html:z
-        - ./apache-httpd/logs:/apache
-        - ./matomo/state:/state
-    depends_on:
-      - matomo
-    restart: always
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
+  # python_matomo:
+  #   build:
+  #     context: ./matomo/
+  #     dockerfile: Dockerfile.cron
+  #   container_name: matomo_python
+  #   env_file:
+  #     - .env     # path to your .env file
+  #   volumes:
+  #       - ./matomo/data/matomo:/var/www/html:z
+  #       - ./apache-httpd/logs:/apache
+  #       - ./matomo/state:/state
+  #   depends_on:
+  #     - matomo
+  #   restart: always
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-size: "10m"
+  #       max-file: "3"
 
   ghc_web:
     image: geopython/geohealthcheck:0.9.0
