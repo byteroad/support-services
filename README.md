@@ -85,6 +85,36 @@ docker compose exec matomo bash -c 'echo "proxy_uri_header = 1" >> /var/www/html
 docker run --rm -it --name dcv -v $(pwd):/input pmsipilot/docker-compose-viz render --force --no-volumes -m image docker-compose.yml
 ```
 
+## Export and import matomo DB from another instance
+During this process, keep Matomo switched off. Then, from mariadb container on old server do:
+
+```
+mysqldump -u matomo -p matomo > matomo_dump.sql
+gzip matomo_dump.sql
+```
+
+Copy matomo_dump.sql.gz to the new server (inside mariadb container) and 
+
+```
+mysql -u matomo -p matomo
+```
+
+On SQL shell:
+
+```
+DROP DATABASE matomo;
+CREATE DATABASE matomo;
+EXIT;
+```
+
+Upload the db
+
+```
+zcat matomo_dump.sql.gz | mysql -u matomo -p matomo
+```
+
+And finally restart matomo.
+
 ## License
 
 This project is released under an [MIT License](./LICENSE)
