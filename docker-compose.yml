@@ -42,10 +42,10 @@ services:
       # - ./apache-httpd/httpd.conf:/usr/local/apache2/conf/httpd.conf
       - ./apache-httpd/httpd-ssl.conf:/usr/local/apache2/conf/httpd.conf
       - ./apache-httpd/robots.txt:/usr/local/apache2/htdocs/robots.txt      
-      - /etc/cert/2logs.pem:/usr/local/apache2/conf/matomo/fullchain.pem  
-      - /etc/cert/logs_privkey4.pem:/usr/local/apache2/conf/matomo/privkey.pem
-      - /etc/cert/1ghc.pem:/usr/local/apache2/conf/health/fullchain.pem  
-      - /etc/cert/ghc_privkey1.pem:/usr/local/apache2/conf/health/privkey.pem
+      - /opt/certs/logs/fullchain.pem:/usr/local/apache2/conf/logs/fullchain.pem  
+      - /opt/certs/logs/privkey.pem:/usr/local/apache2/conf/logs/privkey.pem
+      - /opt/certs/ghc/fullchain.pem:/usr/local/apache2/conf/ghc/fullchain.pem  
+      - /opt/certs/ghc/privkey.pem:/usr/local/apache2/conf/ghc/privkey.pem
     ports:
       - "80:80"
       - "443:443"
